@@ -1,56 +1,62 @@
 {
-    "daily_capacity": 8,
-    "planning_days": 7,
-    "tasks": [
-      {
-        "id": "T1",
-        "priority": 80,
-        "effort": 4,
-        "deadline": 3,
-        "dependencies": []
-      },
-      {
-        "id": "T2",
-        "priority": 70,
-        "effort": 5,
-        "deadline": 4,
-        "dependencies": ["T1"]
-      },
-      {
-        "id": "T3",
-        "priority": 60,
-        "effort": 6,
-        "deadline": 2,
-        "dependencies": []
-      },
-      {
-        "id": "T4",
-        "priority": 100,
-        "effort": 8,
-        "deadline": 7,
-        "dependencies": []
-      },
-      {
-        "id": "T5",
-        "priority": 40,
-        "effort": 3,
-        "deadline": 1,
-        "dependencies": []
-      },
-      {
-        "id": "T6",
-        "priority": 50,
-        "effort": 7,
-        "deadline": 3,
-        "dependencies": ["T3"]
-      },
-      {
-        "id": "T7",
-        "priority": 30,
-        "effort": 5,
-        "deadline": 2,
-        "dependencies": []
-      }
-    ]
-  }
-  
+  "daily_capacity": 8,
+  "planning_days": 6,
+  "tasks": [
+    {
+      "id": "A1",
+      "priority": 90,
+      "effort": 6,
+      "deadline": 3,
+      "dependencies": []
+    },
+    {
+      "id": "A2",
+      "priority": 75,
+      "effort": 4,
+      "deadline": 2,
+      "dependencies": []
+    },
+    {
+      "id": "A3",
+      "priority": 60,
+      "effort": 5,
+      "deadline": 4,
+      "dependencies": ["A2"]
+    },
+    {
+      "id": "A4",
+      "priority": 120,
+      "effort": 8,
+      "deadline": 6,
+      "dependencies": []
+    },
+    {
+      "id": "A5",
+      "priority": 50,
+      "effort": 3,
+      "deadline": 2,
+      "dependencies": []
+    },
+    {
+      "id": "A6",
+      "priority": 85,
+      "effort": 7,
+      "deadline": 5,
+      "dependencies": ["A1"]
+    },
+    {
+      "id": "A7",
+      "priority": 40,
+      "effort": 4,
+      "deadline": 3,
+      "dependencies": []
+    },
+    {
+      "id": "A8",
+      "priority": 95,
+      "effort": 6,
+      "deadline": 6,
+      "dependencies": ["A3"]
+    }
+  ]
+}
