@@ -12,3 +12,4 @@ def print_report(schedule, total_priority, unscheduled):
     else:
         for task_id, reason in unscheduled:
             print(f"{task_id} → {reason}")
+print("End")
