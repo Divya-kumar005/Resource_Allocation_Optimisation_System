@@ -1,0 +1,56 @@
+{
+    "daily_capacity": 8,
+    "planning_days": 7,
+    "tasks": [
+      {
+        "id": "T1",
+        "priority": 80,
+        "effort": 4,
+        "deadline": 3,
+        "dependencies": []
+      },
+      {
+        "id": "T2",
+        "priority": 70,
+        "effort": 5,
+        "deadline": 4,
+        "dependencies": ["T1"]
+      },
+      {
+        "id": "T3",
+        "priority": 60,
+        "effort": 6,
+        "deadline": 2,
+        "dependencies": []
+      },
+      {
+        "id": "T4",
+        "priority": 100,
+        "effort": 8,
+        "deadline": 7,
+        "dependencies": []
+      },
+      {
+        "id": "T5",
+        "priority": 40,
+        "effort": 3,
+        "deadline": 1,
+        "dependencies": []
+      },
+      {
+        "id": "T6",
+        "priority": 50,
+        "effort": 7,
+        "deadline": 3,
+        "dependencies": ["T3"]
+      },
+      {
+        "id": "T7",
+        "priority": 30,
+        "effort": 5,
+        "deadline": 2,
+        "dependencies": []
+      }
+    ]
+  }
+  
