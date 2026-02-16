@@ -11,14 +11,16 @@ def main():
     data = load_data(filepath)
 
     tasks = data["tasks"]
-    daily_capacity = data["daily_capacity"]
-    planning_days = data["planning_days"]
 
-    sorted_ids =sort(tasks)
-
+   
+    sorted_ids = sort(tasks)
 
     ordered_tasks = [next(t for t in tasks if t["id"] == tid) for tid in sorted_ids]
 
+    
+    data["tasks"] = ordered_tasks
+
+ 
     schedule, total_priority, unscheduled = schedule_tasks(data)
 
     print_report(schedule, total_priority, unscheduled)
