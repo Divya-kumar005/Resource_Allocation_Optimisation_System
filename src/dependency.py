@@ -1,15 +1,14 @@
 from collections import defaultdict, deque
 
 
-def topological_sort(tasks):
+def sort(tasks):
     graph = defaultdict(list)
     indegree = defaultdict(int)
 
-    # Initialize indegree
     for task in tasks:
         indegree[task["id"]] = 0
 
-    # Build graph
+
     for task in tasks:
         for dep in task["dependencies"]:
             graph[dep].append(task["id"])

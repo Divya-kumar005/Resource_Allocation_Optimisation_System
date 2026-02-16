@@ -1,6 +1,6 @@
 def print_report(schedule, total_priority, unscheduled):
 
-    print("\n===== 7-Day Schedule =====")
+    print("\n 7-Day Schedule planner")
     for day in schedule:
         print(f"Day {day}: {schedule[day]}")
 
