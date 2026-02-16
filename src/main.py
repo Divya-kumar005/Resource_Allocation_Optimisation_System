@@ -20,11 +20,7 @@ def main():
     # Reorder tasks
     ordered_tasks = [next(t for t in tasks if t["id"] == tid) for tid in sorted_ids]
 
-    schedule, total_priority, unscheduled = schedule_tasks(
-        ordered_tasks,
-        daily_capacity,
-        planning_days
-    )
+    schedule, total_priority, unscheduled = schedule_tasks(data)
 
     print_report(schedule, total_priority, unscheduled)
 

@@ -1,51 +1,73 @@
-def schedule_tasks(tasks, daily_capacity, planning_days):
+def compute_score(task, completed, planning_days, alpha=2.0, beta=1.5):
+    priority = task["priority"]
+    effort = task["effort"]
+    deadline = task["deadline"]
+    dependencies = task["dependencies"]
 
-   
-    tasks_sorted = sorted(
-        tasks,
-        key=lambda x: x["priority"] / x["effort"],
-        reverse=True
-    )
+    # Base score
+    base = priority / effort
 
+    # Urgency factor
+    urgency = (planning_days - deadline + 1) / planning_days
+    urgency_weight = alpha * urgency
+
+    # Dependency penalty
+    unmet_dependencies = sum(1 for d in dependencies if d not in completed)
+    dependency_penalty = beta * unmet_dependencies
+
+    return base + urgency_weight - dependency_penalty
+
+
+def schedule_tasks(data):
+    daily_capacity = data["daily_capacity"]
+    planning_days = data["planning_days"]
+    tasks = data["tasks"]
+
+    completed = set()
     schedule = {day: [] for day in range(1, planning_days + 1)}
-    remaining_capacity = {day: daily_capacity for day in range(1, planning_days + 1)}
-    completion_day = {}
+    total_priority = 0
     unscheduled = []
 
-    for task in tasks_sorted:
-        assigned = False
+    remaining_tasks = tasks.copy()
 
-       
-        if task["dependencies"]:
-            dep_days = []
-            for dep in task["dependencies"]:
-                if dep not in completion_day:
-                    unscheduled.append((task["id"], "Dependency not completed"))
-                    assigned = True
-                    break
-                dep_days.append(completion_day[dep])
-            if assigned:
-                continue
-            earliest_day = max(dep_days) + 1
+    for day in range(1, planning_days + 1):
+        capacity = daily_capacity
+
+        # Filter tasks that:
+        # - Not completed
+        # - Deadline not exceeded
+        available_tasks = [
+            t for t in remaining_tasks
+            if t["id"] not in completed and t["deadline"] >= day
+        ]
+
+        # Compute score dynamically
+        available_tasks.sort(
+            key=lambda t: compute_score(t, completed, planning_days),
+            reverse=True
+        )
+
+        for task in available_tasks:
+            task_id = task["id"]
+            effort = task["effort"]
+
+            # Check dependencies satisfied
+            if all(dep in completed for dep in task["dependencies"]):
+                if effort <= capacity:
+                    schedule[day].append(task_id)
+                    completed.add(task_id)
+                    total_priority += task["priority"]
+                    capacity -= effort
+
+        remaining_tasks = [t for t in remaining_tasks if t["id"] not in completed]
+
+    # Remaining tasks → unscheduled
+    for task in remaining_tasks:
+        reason = "Dependency not completed"
+        if any(dep not in completed for dep in task["dependencies"]):
+            reason = "Dependency not completed"
         else:
-            earliest_day = 1
-
-     
-        for day in range(earliest_day, min(task["deadline"], planning_days) + 1):
-            if remaining_capacity[day] >= task["effort"]:
-                schedule[day].append(task["id"])
-                remaining_capacity[day] -= task["effort"]
-                completion_day[task["id"]] = day
-                assigned = True
-                break
-
-        if not assigned:
-            unscheduled.append((task["id"], "Insufficient capacity or deadline exceeded"))
-
-    total_priority = sum(
-        task["priority"]
-        for task in tasks
-        if task["id"] in completion_day
-    )
+            reason = "Insufficient capacity or deadline exceeded"
+        unscheduled.append((task["id"], reason))
 
     return schedule, total_priority, unscheduled
