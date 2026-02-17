@@ -1,97 +1,103 @@
 Resource Allocation Scheduler
-Project Overview
+ Project Overview
 
-This project implements a Resource Allocation Scheduler that assigns tasks to limited daily capacity in order to maximize total priority score while respecting:
-
-Daily capacity constraints
-
-Task deadlines
-
-Task dependencies
-
-The system produces a 7-day schedule showing selected tasks, total priority achieved, and unscheduled tasks with reasons.
-
-
- Problem Statement
-
-Given:
-
-A list of tasks containing:
-
-Priority score
-
-Effort (hours)
-
-Deadline (day number)
-
-Dependency list (optional)
-
-Fixed daily capacity (e.g., 8 hours/day)
-
-Planning horizon (e.g., 7 days)
+This project builds a Resource Allocation Scheduler that assigns tasks to limited daily working hours (for example, 8 hours per day).
 
 The goal is to:
 
-Maximize total priority while ensuring feasibility of schedule.
+Select and schedule tasks in a way that maximizes total priority while respecting all constraints.
 
- Features Implemented
+The scheduler generates:
 
- Daily capacity constraint 
- Deadline constraint
- Dependency ordering 
- Circular dependency detection
- Dynamic urgency handling
- Knapsack-based daily optimization
- Reporting of unscheduled tasks
+A 7-day task plan
+
+Total priority achieved
+
+List of unscheduled tasks with reasons
+
+Problem Statement
+
+We are given:
+
+A list of tasks, where each task has:
+
+Priority score
+
+Effort (hours required)
+
+Deadline (day number)
+
+Dependencies (optional)
+
+Fixed daily capacity (e.g., 8 hours per day)
+
+A planning period (e.g., 7 days)
+
+The objective is:
+
+Maximize total priority while ensuring all constraints are satisfied.
+
+Features Implemented
+
+ Daily capacity is never exceeded
+ Tasks are completed before their deadline
+ Task dependencies are enforced
+ Circular dependencies are detected
+ Tasks closer to deadline are prioritized
+ Daily optimization using Knapsack algorithm
+ Clear reporting of unscheduled tasks
 
  Approach Used
 
-The system uses a  Heuristic + Optimization Approach:
+The scheduler uses a combination of smart rules (heuristics) and optimization techniques.
 
-Step 1: Dependency Resolution 
+ Step 1: Handle Dependencies
 
-Before scheduling, tasks are sorted using Topological Sort to ensure:
+Before scheduling, tasks are arranged using Topological Sort.
 
-A task always appears after its dependencies.
+This ensures:
+
+A task is never scheduled before its dependency.
 
 Circular dependencies are detected and rejected.
 
-This guarantees structural correctness.
+Example:
 
-Step 2: Dynamic Priority Scoring
+If T2 depends on T1, then T1 will always come before T2.
 
-Each task receives a dynamic score:
+ Step 2: Calculate Task Score
+
+Each task is given a dynamic score:
 
 Score = (Priority / Effort)
-        + Urgency Weight
+        + Urgency
         - Dependency Penalty
 
-Where:
+What each part means:
 
-Priority/Effort → Measures efficiency
+Priority / Effort → Measures how valuable the task is compared to time required.
 
-Urgency → Increases as deadline approaches
+Urgency → Increases as the deadline gets closer.
 
-Urgency increases dynamically:
+Dependency penalty → Reduces score if dependencies are not completed.
+
+Urgency is calculated as:
 
 Urgency = 1 / (Days Remaining)
 
 
-This ensures tasks closer to deadlines are prioritized.
+This means tasks closer to their deadline become more important.
 
-Step 3: Daily Optimization using 0/1 Knapsack
+Step 3: Daily Optimization Using Knapsack
 
-Instead of greedy selection, the scheduler uses 0/1 Knapsack per day:
+Instead of simply picking tasks one by one, the system uses the 0/1 Knapsack algorithm every day.
+knapsack ensures the best combination of tasks is selected for each day.
 
-Objective:
-
-Maximize total priority within daily capacity
-
-Step 4: Schedule Construction
+ Step 4: Build the Schedule
 
 For each day:
 
-Filter valid tasks:
+Select valid tasks:
 
 Deadline not passed
 
@@ -101,4 +107,6 @@ Apply knapsack optimization
 
 Assign selected tasks
 
-Update completed set
+Update completed task list
+
+Move to next day
